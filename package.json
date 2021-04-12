@@ -1,0 +1,20 @@
+{
+  "name": "React Jk Jk",
+  "version": "1.0.0",
+  "repository": "https://github.com/NeilWkz/react-jk-jk",
+  "description": "An app to testdrive of snowpack and other tools config for React",
+  "main": "index.js",
+  "scripts": {
+    "test": "xo"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "snowpack": "^3.2.2",
+    "xo": "^0.38.2"
+  },
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
+}

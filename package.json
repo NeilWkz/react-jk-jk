@@ -5,7 +5,7 @@
   "description": "An app to testdrive of snowpack and other tools config for React",
   "main": "index.js",
   "scripts": {
-    "test": "xo"
+    "lint": "xo"
   },
   "author": "",
   "license": "ISC",

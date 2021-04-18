@@ -84,19 +84,20 @@ node_modules/
 ##### Create a components folder and create an App.tsx
 
 ```
-import React from 'react'
+import React, { ReactElement } from 'react'
 
 interface Props {
-  
+
 }
 
-export const App = (props: Props) => {
+export default function App({}: Props): ReactElement {
   return (
     <div>
-      
+      <h1>Hello world</h1>
     </div>
   )
 }
+
 ```
 
 
@@ -104,7 +105,7 @@ export const App = (props: Props) => {
 
 `npm install --save-dev modern-css-reset` 
 
-props to Andy Bell for this excellent 
+props to Andy Bell for this excellent package
 
 ##### Create a styles folder and inside create an `index.scss`
 
@@ -113,8 +114,51 @@ props to Andy Bell for this excellent
 ```
 
 
+#### Create an index.html
+
+```
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Your Project Name</title>
+    <meta name="description" content="A description of my app" />
+    <meta name="author" content="Neil Ross" />
+    <meta charset="utf-8" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="index.js"></script>
+  </body>
+</html>
+```
+
+#### Create an `index.tsx`
 
 
+```
+import * as React from 'react';
+import * as ReactDOM from "react-dom";
+
+import App from './components/App';
+import "./styles/index.scss";
+
+var mountNode = document.getElementById("app");
+ReactDOM.render(<App />, mountNode);
+```
+
+
+### Insert snowpack `scripts` into your `package.json`
+
+```
+// <the start of your package.json >
+ "scripts": {
+    "clean": "rm dist/bundle.js",
+    "start": "snowpack dev",
+    "build": "snowpack build",
+    "test": "jest"
+  },
+// <the rest of your package.json >
+```
 
 
 

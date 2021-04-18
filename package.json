@@ -5,11 +5,15 @@
   "description": "An app to testdrive of snowpack and other tools config for React",
   "main": "index.js",
   "scripts": {
-    "lint": "xo"
+    "clean": "rm dist/bundle.js",
+    "start": "snowpack dev",
+    "build": "snowpack build",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@snowpack/plugin-sass": "^1.4.0",
     "eslint": "^7.24.0",
     "eslint-config-prettier": "^8.2.0",
     "eslint-config-xo": "^0.36.0",

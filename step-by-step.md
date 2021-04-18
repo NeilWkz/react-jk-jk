@@ -113,18 +113,19 @@ export default function App({}: Props): ReactElement {
 ```
 
 
-#### reset your css
 
-`npm install --save-dev modern-css-reset` 
 
-props to Andy Bell for this excellent package
+##### Create a styles folder 
 
-##### Create a styles folder and inside create an `index.scss`
+#### reset your css create `styles/config/_reset.scss`
+I'm using Andy Bell's [modern-css-reset](https://github.com/andy-piccalilli/modern-css-reset) 
+
+#### create a `styles/index.scss`
 
 ```
-@import './node_modules/modern-css-reset/dist/reset.css';
-```
+@import 'config/reset';
 
+```
 
 #### Create an index.html
 

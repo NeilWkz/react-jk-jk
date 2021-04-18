@@ -1,5 +1,17 @@
 #Setup CMD Snowpack
 
+
+## TLDR: The npm install commands
+
+```
+npm init
+npm install react react-dom
+npm install --save-dev snowpack eslint prettier eslint-config-prettier eslint-plugin-prettier eslint-config-xo jest @snowpack/plugin-sass
+```
+
+
+
+
 ### Start a new project
 
 `npm init`

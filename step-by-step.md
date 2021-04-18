@@ -161,6 +161,10 @@ ReactDOM.render(<App />, mountNode);
 ```
 
 
+### Start the Project
+
+`npm start`
+
 
 
 

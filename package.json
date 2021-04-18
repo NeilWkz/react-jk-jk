@@ -1,5 +1,5 @@
 {
-  "name": "React Jk Jk",
+  "name": "react-jk-jk",
   "version": "1.0.0",
   "repository": "https://github.com/NeilWkz/react-jk-jk",
   "description": "An app to testdrive of snowpack and other tools config for React",
@@ -10,8 +10,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "snowpack": "^3.2.2",
-    "xo": "^0.38.2"
+    "eslint": "^7.24.0",
+    "eslint-config-prettier": "^8.2.0",
+    "eslint-config-xo": "^0.36.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "jest": "^26.6.3",
+    "prettier": "^2.2.1",
+    "snowpack": "^3.2.2"
   },
   "dependencies": {
     "react": "^17.0.2",

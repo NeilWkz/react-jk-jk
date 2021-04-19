@@ -1,12 +1,10 @@
-import React, { ReactElement } from 'react'
+import * as React from 'react'
 
-interface Props {
+interface Props {}
 
-}
-
-export default function App({}: Props): ReactElement {
+export default function App({}: Props) {
   return (
-    <div>
+    <div className="container">
       <h1>Hello world</h1>
     </div>
   )

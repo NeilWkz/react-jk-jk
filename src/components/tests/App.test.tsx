@@ -3,12 +3,12 @@ import App from '../App'
 import { render} from '@testing-library/react';
 
 
-test('The document must have an h1', () => {
+test('The document must have an heading', () => {
 
-  const {getByText} = render(
+  const { getByRole} = render(
     <App />,
   );
 
-  expect(getByText('Hello world')).toBeTruthy();
+  expect(getByRole('heading')).toBeTruthy();
 
 });

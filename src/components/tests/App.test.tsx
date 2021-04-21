@@ -1,14 +1,34 @@
-import * as React from 'react';
+import * as React from 'react'
 import App from '../App'
-import { render} from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react'
 
 
-test('The document must have an heading', () => {
+const renderApp = (joke?: string) => render(<App joke={joke} />)
 
-  const { getByRole} = render(
-    <App />,
-  );
+test('The document should have an heading', () => {
+  const { getByRole } = renderApp()
 
-  expect(getByRole('heading')).toBeTruthy();
+  expect(getByRole('heading')).toBeTruthy()
+})
 
-});
+test('The app has a button', () => {
+
+  const { getByRole } = renderApp()
+
+  expect(getByRole('button')).toBeTruthy()
+})
+
+
+test('When the user clicks the button then a joke appears', () => {
+
+  const testJoke = "What's brown and sticky? ... A stick"
+
+  const { getByRole, getByText } = renderApp(testJoke)
+
+  const button = getByRole('button')
+
+  fireEvent.click(button)
+
+  expect(getByText(testJoke)).toBeInTheDocument()
+
+})

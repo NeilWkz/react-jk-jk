@@ -6,25 +6,32 @@ interface Props {
   joke?: string
 }
 
-const GET_JOKE = gql`
-  query joke(query: String) {
-    joke(query: $query) {
-      Joke
-    }
 
+export const GET_JOKE_QUERY = gql`
+  query joke {
+    joke {
+      id
+      joke
+      permalink
+    }
   }
-`
+`;
+
 
 export default function App({ joke }: Props) {
   const [isClicked, setIsClicked] = useState(false)
 
-  const { loading, error, data } = useQuery(GET_JOKE)
+  const { loading, error, data } = useQuery(GET_JOKE_QUERY
+  )
 
-  console.log(data)
 
-  return (
+
+  if (loading) return <p>Loading...</p>;
+
+  return  data && (
     <div className="container">
       <h1>React Jk-Jk</h1>
+      <p>{JSON.stringify(data)}</p>
       {isClicked && <p>{joke}</p>}
       <button onClick={() => setIsClicked(true)}>Click me</button>
     </div>

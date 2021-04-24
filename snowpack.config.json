@@ -1,9 +1,17 @@
 {
-  "mount": {
-    "dist": "/",
-    "src": "/"
-  },
-  "plugins": [
-    "@snowpack/plugin-sass"
-  ]
+    "mount": {
+        "dist": "/",
+        "src": "/"
+    },
+    "plugins": [
+        "@snowpack/plugin-typescript",
+        ["@snowpack/plugin-sass", { "style": "compressed" }],
+        [
+            "@snowpack/plugin-run-script",
+            {
+                "cmd": "eslint --ext .js,.jsx,.ts,.tsx",
+                "watch": "npx esw -w --clear src --ext .js,.jsx,.ts,.tsx"
+            }
+        ]
+    ]
 }

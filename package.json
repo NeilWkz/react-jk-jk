@@ -1,43 +1,76 @@
 {
-  "name": "react-jk-jk",
-  "version": "1.0.0",
-  "repository": "https://github.com/NeilWkz/react-jk-jk",
-  "description": "An app to testdrive of snowpack and other tools config for React",
-  "main": "index.js",
-  "scripts": {
-    "clean": "rm dist/bundle.js",
-    "start": "snowpack dev",
-    "build": "snowpack build",
-    "test": "jest",
-    "jest": "jest --watch"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/preset-react": "^7.13.13",
-    "@snowpack/plugin-sass": "^1.4.0",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^11.2.6",
-    "@types/jest": "^26.0.22",
-    "@types/react": "^17.0.3",
-    "@types/testing-library__jest-dom": "^5.9.5",
-    "babel-jest": "^26.6.3",
-    "eslint": "^7.24.0",
-    "eslint-config-prettier": "^8.2.0",
-    "eslint-config-xo": "^0.36.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "i": "^0.3.6",
-    "jest": "^26.6.3",
-    "modern-css-reset": "^1.4.0",
-    "npm": "^7.10.0",
-    "prettier": "^2.2.1",
-    "snowpack": "^3.2.2",
-    "ts-jest": "^26.5.5"
-  },
-  "dependencies": {
-    "@apollo/client": "^3.3.15",
-    "graphql": "^15.5.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  }
+    "name": "react-jk-jk",
+    "version": "1.0.0",
+    "repository": "https://github.com/NeilWkz/react-jk-jk",
+    "description": "An app to testdrive of snowpack and other tools config for React",
+    "main": "index.js",
+    "scripts": {
+        "clean": "rm dist/bundle.js",
+        "start": "snowpack dev",
+        "build": "snowpack build",
+        "test": "jest",
+        "jest": "jest --watch"
+    },
+    "author": "",
+    "license": "ISC",
+    "eslintConfig": {
+        "root": true,
+        "parser": "@typescript-eslint/parser",
+        "plugins": [
+            "@typescript-eslint",
+            "eslint-plugin-prettier",
+            "jest"
+        ],
+        "extends": [
+            "eslint-config-xo",
+            "eslint-config-prettier"
+        ],
+        "env": {
+            "browser": true,
+            "jest/globals": true
+        },
+        "rules": {
+            "semi": "off"
+        }
+    },
+    "prettier": {
+        "tabWidth": 4,
+        "semi": false
+    },
+    "devDependencies": {
+        "@babel/preset-react": "^7.13.13",
+        "@snowpack/plugin-build-script": "^2.1.0",
+        "@snowpack/plugin-run-script": "^2.3.0",
+        "@snowpack/plugin-sass": "^1.4.0",
+        "@snowpack/plugin-typescript": "^1.2.1",
+        "@testing-library/jest-dom": "^4.2.4",
+        "@testing-library/react": "^11.2.6",
+        "@types/jest": "^26.0.22",
+        "@types/react": "^17.0.3",
+        "@types/react-dom": "^17.0.3",
+        "@types/testing-library__jest-dom": "^5.9.5",
+        "@typescript-eslint/eslint-plugin": "^4.22.0",
+        "@typescript-eslint/parser": "^4.22.0",
+        "babel-jest": "^26.6.3",
+        "eslint": "^7.24.0",
+        "eslint-config-prettier": "^8.2.0",
+        "eslint-config-xo": "^0.36.0",
+        "eslint-plugin-jest": "^24.3.5",
+        "eslint-plugin-prettier": "^3.4.0",
+        "eslint-watch": "^7.0.0",
+        "i": "^0.3.6",
+        "jest": "^26.6.3",
+        "modern-css-reset": "^1.4.0",
+        "npm": "^7.10.0",
+        "prettier": "^2.2.1",
+        "snowpack": "^3.2.2",
+        "ts-jest": "^26.5.5",
+        "typescript": "^4.2.4"
+    },
+    "dependencies": {
+        "@apollo/client": "^3.3.15",
+        "graphql": "^15.5.0",
+        "react": "^17.0.2",
+        "react-dom": "^17.0.2"
+    }
 }

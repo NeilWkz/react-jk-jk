@@ -4,21 +4,21 @@ import * as ReactDOM from 'react-dom'
 import App from './components/App'
 import './styles/index.scss'
 
-import { ApolloClient, InMemoryCache } from '@apollo/client'
-import { ApolloProvider } from '@apollo/client/react'
+import {ApolloClient, InMemoryCache} from '@apollo/client'
+import {ApolloProvider} from '@apollo/client/react'
 
 const uri = 'https://icanhazdadjoke.com/graphql'
 
 const client = new ApolloClient({
-  // link: authLink.concat(httpLink),
-  uri,
-  cache: new InMemoryCache(),
+	// Link: authLink.concat(httpLink),
+	uri,
+	cache: new InMemoryCache()
 })
 
-var mountNode = document.getElementById('app')
+const mountNode = document.getElementById('app')
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App joke="What's brown and sticky? ... A stick" />
-  </ApolloProvider>,
-  mountNode
+	<ApolloProvider client={client}>
+		<App joke="What's brown and sticky? ... A stick" />
+	</ApolloProvider>,
+	mountNode
 )

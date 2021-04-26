@@ -1,15 +1,20 @@
 # React-jk-jk
 
-A dumb joke book app, with TDD and css animation intro
+A dumb joke book app, with TDD. Built on Snowpack with help from my [React Snowpack QuickStart](https://github.com/NeilWkz/React-Snowpack-Quick-Start). If you want to follow along, feel free to use `Create React App`
 
+
+>Before we start you should be aware that is a tutorial to demonstrate TDD methodology in a React application, not to teach you how to build a joke fetching app. The technology choices used in this article are completely unsuitable for a small content marketing app. It is an antipattern to load the React framework, unless it is required within the platform, a more appropriate choice would be vanilla js, alpine-js or Svelte. Please also be aware `apollo-client` is also massively chunky, and again if you're working on a platform that can be warranted, but if you want a lightweight graphQL client concider `graphql-request`
 
 ## Start your Tooling
 
 Open the vscode terminal and split-screen it, in one start snow pack by running
+
 ```
  npm start
 ```
+
 and in the other start jest in `--watch` mode by running
+
 ```
 npm run jest
 ```
@@ -17,7 +22,7 @@ npm run jest
 ## Setup your style space
 
 Add a `_variable.scss` Declare your constants, in SCSS, we need to start with our device widths.
-Add a container class to wrap your app, setup a  basic layout. Add some fonts to your `index.html` and setup some `font-family` rules. We don't want to style it too much just enough so we can stand to look at it during development
+Add a container class to wrap your app, setup a basic layout. Add some fonts to your `index.html` and setup some `font-family` rules. We don't want to style it too much just enough so we can stand to look at it during development
 
 ### Create your first test
 
@@ -40,14 +45,12 @@ test('The document must have an heading', () => {
 
   expect(getByRole('heading')).toBeTruthy();
 
-  ```
+```
 
-*SIDENOTE:*
-  _We want the test to be as simple a statement of what the app is doing as possible. In Behaviour-driven development, we would use our Gherkin Scenario_
-
+_SIDENOTE:_
+_We want the test to be as simple a statement of what the app is doing as possible. In Behaviour-driven development, we would use our Gherkin Scenario_
 
 The test fails! We have Red. Now the core of TDD is getting it to turn Green. We call this RED-GREEN-REFACTOR.
-
 
 Now we add an `h1` to our `App.tsx`
 
@@ -66,7 +69,6 @@ export default function App({}: Props) {
 ```
 
 The test passes! We have Green. ONWARDS to fail once more, for our next test, we know that we need a button.
-
 
 ```
 test('When the app loads there is a button', () => {
@@ -144,7 +146,6 @@ export default function App({joke}: Props) {
 
 Notice we make the component accept a prop `joke` so it can receive the text, and we use a `useState` to determine if the button has been clicked. That passes, now we must refactor
 
-
 Now let's get some data
 
 ```
@@ -167,7 +168,7 @@ const renderApp = (joke?: string) => {
 }
 ```
 
-The next part we need to generate our mock. I'm going to use the https://icanhazdadjoke.com/api as a data source, and the [insomnia app](https://insomnia.rest/download) to grab my mock. 
+The next part we need to generate our mock. I'm going to use the https://icanhazdadjoke.com/api as a data source, and the [insomnia app](https://insomnia.rest/download) to grab my mock.
 
 > I'm using the graphQL endpoint as for demo purposes, to get that to work locally would cause CORS issues. Now CORS issues are why we work with Backend Developers, professionally I'd slack a collegue to sort our the CORS policy, here I'm using the [allow CORS chrome extension](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf/related?hl=en) to enable CORS locally.
 
@@ -183,7 +184,7 @@ query joke {
 }
 ```
 
-The data returned in Insomnia can form the basis of the mock that we pass to `mockedProvider`. we give our query a name of `GET_JOKE_QUERY`. 
+The data returned in Insomnia can form the basis of the mock that we pass to `mockedProvider`. we give our query a name of `GET_JOKE_QUERY`.
 
 ```
 const mocks = [
@@ -239,7 +240,7 @@ ReactDOM.render(
 )
 ```
 
-Now back in our `App.tsx` we import `useQuery` and add our `GET_JOKE_QUERY`  to the head of the file
+Now back in our `App.tsx` we import `useQuery` and add our `GET_JOKE_QUERY` to the head of the file
 
 ```
 import { useQuery, gql } from '@apollo/client'
@@ -275,7 +276,6 @@ export default function App({ joke }: Props) {
 }
 
 ```
-
 
 Great :-) now our loading test passes, but now all of our other tests fail, we need to make our other tests asyncronus and introduce async await. We can update our other tests to be
 
@@ -357,11 +357,112 @@ test('When the user clicks the button then a joke appears', async () => {
 })
 ```
 
+Now we want to change the behaviour so that the app loads and then fetches data and then shows us a joke so we write:
 
+```
+test("When data is fetched a joke is displayed on the screen", async ()=> {
+  renderApp()
+  await doneLoading(screen)
 
+  expect(screen.getByTestId('joke')).toBeInTheDocument()
 
+})
+```
 
+So the fastest way to make that green is to simply add a test-id to our App.tsx
 
+```
+return (
+        data ? (
+            <div className="container">
+                <h1>React Jk-Jk</h1>
+                <p data-testid="joke">{JSON.stringify(data)}</p>
+                {isClicked && <p>{joke}</p>}
+                <button onClick={() => setIsClicked(true)}>Click me</button>
+            </div>
+        ) : null
+    )
+}
+```
 
+We need to refactor to get the behaviour we want. We're going to need to actually display a joke.
+So we're going to create a small component to display a joke. 
 
+```
+import * as React from 'react'
+
+interface Joke {
+  id: string
+  joke: string
+  permalink: string
+}
+export default function Joke(jokeData: Joke) {
+  return (
+    <div>
+      <p>{jokeData.joke}</p>
+    </div>
+  )
+}
+```
+
+Now we have a failing test we need to refactor our _"When the user clicks the button then a joke appears"_ test. We're going to change this to be _"When the user clicks the button the app fetches a new joke"_. We refactor our spec:
+
+```
+test("When the user clicks the button the app fetches a new joke", async () => {
+    renderApp()
+
+    await screen.findByTestId("joke")
+
+    const button = screen.getByRole("button")
+
+    fireEvent.click(button)
+
+    await screen.findByTestId("joke")
+
+    expect(mockjokes).toHaveBeenCalledTimes(2)
+})
+```
+
+You'll notice that instead of awaiting our  `doneLoading` function we are now awaiting a joke appearing on the screen, then clicking our button and then awaiting another joke. Our `expect` statement now introduces another key concept of testing, mocking. So let's write our mock.
+
+First we need to get more results from our service and store them in our mock. Now we create an array of only the results
+
+```
+const jokes = [
+  {
+      data: {
+          joke: {
+              id: "39Etc2orc",
+              joke:
+                  "Why did the man run around his bed? Because he was trying to catch up on his sleep!",
+              permalink: "https://icanhazdadjoke.com/j/39Etc2orc",
+              __typename: "Joke",
+          },
+      },
+  },
+  {
+      data: {
+          joke: {
+              __typename: "Joke",
+              id: "sPfqWDlq4Ed",
+              joke:
+                  '"Hey, dad, did you get a haircut?" "No, I got them all cut."',
+              permalink: "https://icanhazdadjoke.com/j/sPfqWDlq4Ed",
+          },
+      },
+  },
+  {
+      data: {
+          joke: {
+              id: "wcxHJBl3gFd",
+              joke:
+                  "I am terrified of elevators. I\u2019m going to start taking steps to avoid them.",
+              permalink: "https://icanhazdadjoke.com/j/wcxHJBl3gFd",
+              __typename: "Joke",
+          },
+      },
+  },
+]
+
+```
 

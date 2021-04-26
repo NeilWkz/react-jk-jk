@@ -1,11 +1,6 @@
 import * as React from "react"
 import { useQuery, gql } from "@apollo/client"
-
-const { useState } = React
-
-interface Props {
-    joke?: string
-}
+import Joke from "./Joke"
 
 export const GET_JOKE_QUERY = gql`
     query joke {
@@ -17,23 +12,18 @@ export const GET_JOKE_QUERY = gql`
     }
 `
 
-export default function App({ joke }: Props) {
-    const [isClicked, setIsClicked] = useState(false)
-
-    const { loading, data } = useQuery(GET_JOKE_QUERY)
+export default function App() {
+    const { loading, data, refetch } = useQuery(GET_JOKE_QUERY)
 
     if (loading) {
         return <p>Loading...</p>
     }
 
     return (
-        data ? (
-            <div className="container">
-                <h1>React Jk-Jk</h1>
-                <p>{JSON.stringify(data)}</p>
-                {isClicked && <p>{joke}</p>}
-                <button onClick={() => setIsClicked(true)}>Click me</button>
-            </div>
-        ) : null
+        <div className="container">
+            <h1>React Jk-Jk</h1>
+            {data && <Joke joke={data.joke.joke} id={data.joke.id} />}
+            <button onClick={() => refetch()}>Click me</button>
+        </div>
     )
 }

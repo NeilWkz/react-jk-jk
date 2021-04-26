@@ -10,7 +10,6 @@ import {ApolloProvider} from '@apollo/client/react'
 const uri = 'https://icanhazdadjoke.com/graphql'
 
 const client = new ApolloClient({
-	// Link: authLink.concat(httpLink),
 	uri,
 	cache: new InMemoryCache()
 })
@@ -18,7 +17,7 @@ const client = new ApolloClient({
 const mountNode = document.getElementById('app')
 ReactDOM.render(
 	<ApolloProvider client={client}>
-		<App joke="What's brown and sticky? ... A stick" />
+		<App />
 	</ApolloProvider>,
 	mountNode
 )

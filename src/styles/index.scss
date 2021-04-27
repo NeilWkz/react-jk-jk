@@ -1,19 +1,21 @@
 @import 'config/reset';
 @import 'config/variables';
 @import 'layout';
+@import 'button';
+
 
 body {
   // https://uigradients.com/#Disco
   background: #4ecdc4; /* fallback for old browsers */
   background: -webkit-linear-gradient(
     to bottom,
-    #556270,
-    #4ecdc4
+    $primary,
+    $secondary
   ); /* Chrome 10-25, Safari 5.1-6 */
   background: linear-gradient(
     to bottom,
-    #556270,
-    #4ecdc4
+    $primary,
+    $secondary
   ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
   font-size: 16px;
@@ -26,4 +28,16 @@ h3,
 h4,
 h5 {
   font-family: 'Lato', sans-serif;
+}
+
+h1 {
+  font-size: 3em;
+  margin-bottom: 1rem;
+}
+
+.joke {
+  margin-bottom: 2rem;
+  font-size: 2em;
+  text-align: center;
+  font-style: italic;
 }

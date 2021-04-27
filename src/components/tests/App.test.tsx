@@ -11,7 +11,7 @@ import { MockedProvider } from "@apollo/client/testing"
 
 import { jokes } from "../mocks/App.mock"
 
-const mockjokes = jest
+const mockJokes = jest
     .fn()
     .mockReturnValue(jokes[0])
     .mockReturnValueOnce(jokes[1])
@@ -22,12 +22,12 @@ const mocks = [
         request: {
             query: GET_JOKE_QUERY,
         },
-        result: () => mockjokes(),
-        newData: () => mockjokes(),
+        result: () => mockJokes(),
+        newData: () => mockJokes(),
     },
 ]
 
-beforeEach(() => mockjokes.mockClear())
+beforeEach(() => mockJokes.mockClear())
 
 const renderApp = () => {
     return render(
@@ -80,5 +80,5 @@ test("When the user clicks the button the app fetches a new joke", async () => {
 
     await screen.findByTestId("joke")
 
-    expect(mockjokes).toHaveBeenCalledTimes(2)
+    expect(mockJokes).toHaveBeenCalledTimes(2)
 })

@@ -3,7 +3,7 @@
 A dumb joke book app, with TDD. Built on Snowpack with help from my [React Snowpack QuickStart](https://github.com/NeilWkz/React-Snowpack-Quick-Start). If you want to follow along, feel free to use `Create React App`
 
 
->Before we start you should be aware that is a tutorial to demonstrate TDD methodology in a React application, not to teach you how to build a joke fetching app. The technology choices used in this article are completely unsuitable for a small content marketing app. It is an antipattern to load the React framework, unless it is required within the platform, a more appropriate choice would be vanilla js, alpine-js or Svelte. Please also be aware `apollo-client` is also massively chunky, and again if you're working on a platform that can be warranted, but if you want a lightweight graphQL client concider `graphql-request`
+>Before we start you should be aware that is a tutorial to demonstrate TDD methodology in a React application, not to teach you how to build a joke fetching app. The technology choices used in this article are unsuitable for a small content marketing app. It would be a performance blunder to load the React framework unless already required for a critical path elsewhere within the platform. A more appropriate choice for a content marketing app would be vanilla js, alpine-js or Svelte. Please also be aware `apollo-client` is also a chunky dependancy, and again if you're working on a platform that can be warranted, but if you want a lightweight graphQL client consider `graphql-request`
 
 ## Start your Tooling
 
@@ -18,11 +18,6 @@ and in the other start jest in `--watch` mode by running
 ```
 npm run jest
 ```
-
-## Setup your style space
-
-Add a `_variable.scss` Declare your constants, in SCSS, we need to start with our device widths.
-Add a container class to wrap your app, setup a basic layout. Add some fonts to your `index.html` and setup some `font-family` rules. We don't want to style it too much just enough so we can stand to look at it during development
 
 ### Create your first test
 
@@ -170,7 +165,7 @@ const renderApp = (joke?: string) => {
 
 The next part we need to generate our mock. I'm going to use the https://icanhazdadjoke.com/api as a data source, and the [insomnia app](https://insomnia.rest/download) to grab my mock.
 
-> I'm using the graphQL endpoint as for demo purposes, to get that to work locally would cause CORS issues. Now CORS issues are why we work with Backend Developers, professionally I'd slack a collegue to sort our the CORS policy, here I'm using the [allow CORS chrome extension](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf/related?hl=en) to enable CORS locally.
+> I'm using the graphQL endpoint as for demo purposes, to get that to work locally would cause CORS issues. Now CORS issues are *why* we work with Backend Developers, professionally I'd slack a colleague to sort our the CORS policy, here I'm using the [allow CORS chrome extension](https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf/related?hl=en) to enable CORS locally.
 
 We can construct a graphql query and hit the endpoint
 
@@ -419,13 +414,13 @@ test("When the user clicks the button the app fetches a new joke", async () => {
 
     await screen.findByTestId("joke")
 
-    expect(mockjokes).toHaveBeenCalledTimes(2)
+    expect(mockJokes).toHaveBeenCalledTimes(2)
 })
 ```
 
 You'll notice that instead of awaiting our  `doneLoading` function we are now awaiting a joke appearing on the screen, then clicking our button and then awaiting another joke. Our `expect` statement now introduces another key concept of testing, mocking. So let's write our mock.
 
-First we need to get more results from our service and store them in our mock. Now we create an array of only the results
+To make this test grow green, we need to get some more results from our service and store them in our mock. Now we create an array of only the results
 
 ```
 const jokes = [
@@ -466,3 +461,66 @@ const jokes = [
 
 ```
 
+Then we need make the mockedProvider request different jokes:
+, 
+```
+const mocks = [
+    {
+        request: {
+            query: GET_JOKE_QUERY,
+        },
+        result: () => mocks[0],
+        newData: () => mocks[1],
+    },
+]
+```
+We could test the `screen.findByTestId("joke").content` and then click the button and test that the content had changed, but we're trying to test that the button has called the apollo client's `refetch` method. We go a step further and create a jest function to return the data.
+
+```
+const mockJokes = jest
+    .fn()
+    .mockReturnValue(jokes[0])
+    .mockReturnValueOnce(jokes[1])
+    .mockReturnValueOnce(jokes[2])
+
+const mocks = [
+    {
+        request: {
+            query: GET_JOKE_QUERY,
+        },
+        result: () => mockJokes(),
+        newData: () => mockJokes(),
+    },
+]
+
+beforeEach(() => mockJokes.mockClear())
+```
+
+The `jest.fn()` method is so important to the process of testing. It's likely that if we're struggling to test something, we need to take a step back and refocus on the way in which we're mocking external dependencies. We're using the `mockReturnValue` to set default data, then we're making the function return a different `data` object from our array of mocks each time the function is called with `mockReturnValueOnce`. Importantly, because our expect is `expect(mockJokes).toHaveBeenCalledTimes(2)` we need to add jest's `beforeEach` hook to reset the mock before each test, otherwise the mock will persist, and for each test in the `App.test.tsx` it would run, meaning that by the time it reached our test it could be called 4 times, and when another developer in the future inserted new test before it would break our test.
+So now we've refactored our test all that remains is to update our component to make it green.
+
+
+In our App.tsx we update `useQuery` to destructure the `refetch` method, and then we update our `onClick` function to call `refetch()`. 
+
+
+```
+export default function App() {
+    const { loading, data, refetch } = useQuery(GET_JOKE_QUERY)
+
+    if (loading) {
+        return <p>Loading...</p>
+    }
+
+    return (
+        <div className="container">
+            <h1>React Jk-Jk</h1>
+            {data && <Joke joke={data.joke.joke} id={data.joke.id} />}
+            <button onClick={() => refetch()}>Click me</button>
+        </div>
+    )
+}
+```
+
+
+And we're done with the test driven development. We've met the behaviour required. I intend to post another tutorial demonstrating how I would style the joke book app, because TDD may allow you deploy on Fridays and sleep soundly, but nothing is production-ready until it looks _good_ enough for users to want to use it. I'll update this page with a link when I write that tutorial.
+If you have been, thanks for following along. I welcome any comments or feedback on this article.
